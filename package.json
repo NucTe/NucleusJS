@@ -1,9 +1,10 @@
 {
-  "name": "webserver",
+  "name": "nucleusjs",
   "version": "1.0.0",
   "description": "A webserver framwork",
-  "main": "src/index.js",
+  "main": "src/nucleus.js",
   "scripts": {
+    "start": "node src/test.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
