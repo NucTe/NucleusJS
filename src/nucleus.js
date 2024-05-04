@@ -1,36 +1,30 @@
 const http = require('http');
 const url = require('url');
 const qs = require('querystring');
+const Router = require('./router/router');
 
 class Nucleus {
   constructor() {
-    this.routes = {};
+    this.router = new Router();
     this.server = http.createServer((req, res) => {
       this.handleRequest(req, res);
     });
   }
 
   get(path, handler) {
-    this.addRoute('GET', path, handler);
+    this.router.get(path, handler);
   }
 
   post(path, handler) {
-    this.addRoute('POST', path, handler);
+    this.router.post(path, handler);
   }
 
   put(path, handler) {
-    this.addRoute('PUT', path, handler);
+    this.router.put(path, handler);
   }
 
   delete(path, handler) {
-    this.addRoute('DELETE', path, handler);
-  }
-
-  addRoute(method, path, handler) {
-    if (!this.routes[path]) {
-      this.routes[path] = {};
-    }
-    this.routes[path][method] = handler;
+    this.router.delete(path, handler);
   }
 
   handleRequest(req, res) {
@@ -47,7 +41,7 @@ class Nucleus {
     req.on('end', () => {
       req.query = query;
       req.body = qs.parse(body);
-      const handler = this.routes[path] && this.routes[path][method];
+      const handler = this.router.findRoute(method, path);
       if (handler) {
         handler(req, res);
       } else {
